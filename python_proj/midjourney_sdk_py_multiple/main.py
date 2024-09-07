@@ -299,7 +299,8 @@ class Midjourney:
 
         return {
             'imagine_message_id': imagine['id'],
-            'upscaled_photo_url': upscaled_photo_url
+            'upscaled_photo_url': upscaled_photo_url,
+            'imagine': imagine
         }
 
     # get parameter from prompt str # return dict, clean prompt without parameters
