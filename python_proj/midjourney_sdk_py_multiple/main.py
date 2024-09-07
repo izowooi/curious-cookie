@@ -15,7 +15,7 @@ class Midjourney:
     def __init__(self, channel_id, oauth_token):
         self.channel_id = channel_id
         self.oauth_token = oauth_token
-
+        self.cached_url = ''
         self.client = requests.Session()
         self.client.headers.update({
             'Authorization': oauth_token
@@ -184,10 +184,12 @@ class Midjourney:
         count = 0
         while upscaled_photo_url is None:
             upscaled_photo_url = self.get_upscale(message, upscale_index, count)
-            if upscaled_photo_url is None:
+            if upscaled_photo_url is None or self.cached_url == upscaled_photo_url:
                 time.sleep(3)
                 count += 1
-        print(upscaled_photo_url)
+                upscaled_photo_url = None
+
+        self.cached_url = upscaled_photo_url
         return upscaled_photo_url
 
     def get_upscale(self, message, upscale_index=0, count=0):
