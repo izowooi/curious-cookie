@@ -29,3 +29,6 @@ python_proj/.idea/
 /python_proj/auth
 flutter_proj/ios/Runner/GoogleService-Info.plist
 flutter_proj/android/app/google-services.json
+/python_proj/3d
+/python_proj/2d
+/python_proj/realistic
