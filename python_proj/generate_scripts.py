@@ -91,11 +91,11 @@ class OpenAIChatbot:
 
     def run_conversation_test(self, question):
         print(f"Running conversation test()->{question}");
-        ret = ['{"scripts":[{"script":"무지개는 구름과 비가 있던 하늘에서만 나타나는 특별한 현상이야. 모든 조건이 맞아야만 무지개를 볼 수 있어."},{"script":"무지개를 볼 수 있는 위치와 각도도 중요해. 내가 서 있는 위치에 따라서 무지개의 모양이나 색이 조금씩 달라질 수 있어."}],"prompts":[{"prompt":"A scenic view of a sky with clouds and rainbows, indicating special weather conditions."},{"prompt":"A child standing at different positions, looking at how the rainbow changes color and shape from various angles."}],"category":"nature, science"}']
+        ret = ['{"scripts":[{"script":"무지개는 비와 해가 있을 때 생겨요.","prompt":"A bright scene showing rain falling on one side and sunshine breaking through clouds on the other side."},{"script":"먼저, 빗방울 속에서 빛이 꺾여요.","prompt":"Close-up of raindrops catching sunlight, showing how light bends inside them."},{"script":"그런 다음, 빛은 여러 색으로 나뉘어요.","prompt":"A colorful spectrum, with red, orange, yellow, green, blue, indigo, and violet, coming out of a raindrop."},{"script":"무지개는 이렇게 색깔이 하늘에 나타나요.","prompt":"A bright, arched rainbow in a blue sky with fluffy white clouds."},{"script":"무지개는 장난감처럼 보이기도 해요.","prompt":"Children playing happily under the colorful rainbow, pointing at it."},{"script":"각 색깔은 특별한 의미가 있어요.","prompt":"Happy cartoon characters standing beside each color of the rainbow, each character being a different color."},{"script":"무지개는 우리가 꿈꾸는 것 같아요.","prompt":"A dreamy landscape with children lying on grass, looking up at the rainbow."},{"script":"무지개는 환상적인 모양이에요.","prompt":"A giant rainbow with a friendly sun smiling above it."},{"script":"무지개는 아름다움을 볼 수 있는 신호에요.","prompt":"Happy animals sitting under the rainbow, feeling joyful."},{"script":"우리가 함께 보는 무지개는 더 특별해요.","prompt":"A group of friends holding hands, all looking up at the rainbow together."}],"category":"science"}']
         return ret
 
     def generate_script(self, question):
-        response = self.run_conversation_test(question)
+        response = self.run_conversation(question)
 
         if len(response) > 0:
             response_data = response[0]
@@ -106,7 +106,7 @@ class OpenAIChatbot:
         parsed_data = json.loads(response_data)
 
         script_list = [item['script'] for item in parsed_data['scripts']]
-        prompt_list = [item['prompt'] for item in parsed_data['prompts']]
+        prompt_list = [item['prompt'] for item in parsed_data['scripts']]
         category = parsed_data['category'].split(', ')
 
         return script_list, prompt_list, category
