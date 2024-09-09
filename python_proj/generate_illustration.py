@@ -35,8 +35,11 @@ class MidjourneyBot:
             "v": "6.1",
         }
 
-        prompt = f'{prompt}' +\
-                 ' Pixar style, 3D rendered, bright colors, expressive emotions, smooth textures, detailed lighting, cinematic composition'
+        prompt = f'{prompt}' + \
+                 ' --p om8joos --s 800'
+                 #' vector illustration japanese --p om8joos --s 100'
+                 #' Pixar style, 3D rendered, bright colors, expressive emotions, smooth textures, detailed lighting, cinematic composition'
+
         message = self.midjourney.generate(prompt, options, upscale_index=0)
         image_urls.append(message['upscaled_photo_url'])
 
