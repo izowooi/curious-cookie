@@ -14,13 +14,15 @@ class MidjourneyBot:
     def save_images(self, question_id, script_seq, image_urls):
         formatted_question_id = f'{question_id:04d}'
         formatted_script_seq = f'{script_seq:02d}'
-        image_style = "3d"  # 2d, reality
-        for i, image_url in enumerate(image_urls):
-            response = requests.get(image_url)
-            formatted_img_index = f'{i:01d}'
-            image_path = f'{image_style}/{formatted_question_id}_{formatted_script_seq}_{image_style}_{formatted_img_index}.png'
-            with open(image_path, 'wb') as file:
-                file.write(response.content)
+        image_styles = ["mom", "3d", "2d"]
+
+        for image_style in image_styles:
+            for i, image_url in enumerate(image_urls[image_style]):
+                response = requests.get(image_url)
+                formatted_img_index = f'{i:01d}'
+                image_path = f'{image_style}/{formatted_question_id}_{formatted_script_seq}_{image_style}_{formatted_img_index}.png'
+                with open(image_path, 'wb') as file:
+                    file.write(response.content)
 
     def generate_illustration_list(self, question_id, prompt_list):
         for index, prompt in enumerate(prompt_list):
@@ -28,7 +30,7 @@ class MidjourneyBot:
             self.save_images(question_id, index, image_urls)
 
     def generate_illustration_by_prompt(self, prompt):
-        image_urls = []
+        image_urls = {"3d": [], "2d": [], "mom": []}
         options = {
             "ar": "16:9",
             "v": "6.1"
@@ -38,16 +40,22 @@ class MidjourneyBot:
                          ' vector illustration japanese --p om8joos']
 
         for index, illustration_style in enumerate(illustration_styles):
-            img_prompt = f'{prompt}' + \
-                     illustration_style
+            paint_style = None
+            if index == 0:
+                paint_style = 'mom'
+            elif index == 1:
+                paint_style = '3d'
+            elif index == 2:
+                paint_style = '2d'
 
+            img_prompt = f'{prompt}' + illustration_style
             message = self.midjourney.generate(img_prompt, options, upscale_index=0)
-            image_urls.append(message['upscaled_photo_url'])
+            image_urls[paint_style].append(message['upscaled_photo_url'])
 
             if 'imagine' in message:
                 imagine = message['imagine']
                 upscaled_photo_url = self.midjourney.upscale(imagine, 3)
-                image_urls.append(upscaled_photo_url)
+                image_urls[paint_style].append(upscaled_photo_url)
 
         return image_urls
 
