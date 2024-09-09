@@ -190,6 +190,7 @@ class Midjourney:
                 upscaled_photo_url = None
 
         self.cached_url = upscaled_photo_url
+        print(upscaled_photo_url)
         return upscaled_photo_url
 
     def get_upscale(self, message, upscale_index=0, count=0):
