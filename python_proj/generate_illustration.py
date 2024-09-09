@@ -30,23 +30,24 @@ class MidjourneyBot:
     def generate_illustration_by_prompt(self, prompt):
         image_urls = []
         options = {
-            #"ar": "16:9",
-            "ar": "1:1",
-            "v": "6.1",
+            "ar": "16:9",
+            "v": "6.1"
         }
+        illustration_styles = [' --p om8joos',
+                         ' Pixar style, 3D rendered, bright colors, expressive emotions, smooth textures, detailed lighting, cinematic composition',
+                         ' vector illustration japanese --p om8joos']
 
-        prompt = f'{prompt}' + \
-                 ' --p om8joos --s 800'
-                 #' vector illustration japanese --p om8joos --s 100'
-                 #' Pixar style, 3D rendered, bright colors, expressive emotions, smooth textures, detailed lighting, cinematic composition'
+        for index, illustration_style in enumerate(illustration_styles):
+            img_prompt = f'{prompt}' + \
+                     illustration_style
 
-        message = self.midjourney.generate(prompt, options, upscale_index=0)
-        image_urls.append(message['upscaled_photo_url'])
+            message = self.midjourney.generate(img_prompt, options, upscale_index=0)
+            image_urls.append(message['upscaled_photo_url'])
 
-        if 'imagine' in message:
-            imagine = message['imagine']
-            upscaled_photo_url = self.midjourney.upscale(imagine, 3)
-            image_urls.append(upscaled_photo_url)
+            if 'imagine' in message:
+                imagine = message['imagine']
+                upscaled_photo_url = self.midjourney.upscale(imagine, 3)
+                image_urls.append(upscaled_photo_url)
 
         return image_urls
 
