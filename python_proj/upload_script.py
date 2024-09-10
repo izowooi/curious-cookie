@@ -17,6 +17,27 @@ class FBManger:
         self.ref_question = db.reference('/question_db')
         self.ref_script = db.reference('/script_db')
 
+    def set_processed_question(self, question_id):
+        question_db = self.ref_question.get()
+        if question_db is not None:
+            for data in question_db:
+                if data['id'] == question_id:
+                    data['generated'] = 'true'
+                    question_db[data['id']] = data
+                    break
+
+        self.ref_question.set(question_db)
+
+    def get_unprocessed_questions_from_db(self):
+        ret = {}
+        question_db = self.ref_question.get()
+        if question_db is not None:
+            for data in question_db:
+                if data['generated'] == 'true' or data['generated'] == 'True':
+                    continue
+                ret[data['id']] = data['question']
+        return ret
+
     def append_script_list_to_db(self, question_id, script_dict, prompt_list):
         # 각 언어별 스크립트 리스트를 가져오기
         script_kr_list = script_dict.get("kr", [])

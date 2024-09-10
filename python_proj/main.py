@@ -44,11 +44,11 @@ def main():
 
 
 def test_gen_script():
-    pre_question = '공룡은 왜 멸종했나요?'  # todo: 미리 정의된 DB 에서 처리되지 않은 질문을 리스트로 가져와서 요청해야함.
-    question_id = 0
-    script_dict, prompt_list, category = openai_chat_bot.generate_script(pre_question)
-
-    fb_manager.append_script_list_to_db(question_id, script_dict, prompt_list)
+    question_dict = fb_manager.get_unprocessed_questions_from_db()
+    for question_id, question_text in question_dict.items():
+        script_dict, prompt_list, category = openai_chat_bot.generate_script(question_text)
+        fb_manager.append_script_list_to_db(question_id, script_dict, prompt_list)
+        fb_manager.set_processed_question(question_id)
 
 
 def test_gen_illustration():
@@ -61,4 +61,4 @@ def test_gen_illustration():
 
 #main()
 #test_gen_illustration()
-test_gen_script()
+#test_gen_script()
