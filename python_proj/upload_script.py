@@ -17,11 +17,22 @@ class FBManger:
         self.ref_question = db.reference('/question_db')
         self.ref_script = db.reference('/script_db')
 
-    def append_script_list_to_db(self, question_id, script_list, prompt_list):
-        for script, prompt in zip(script_list, prompt_list):
-            self.append_script_to_db(question_id, script, prompt)
+    def append_script_list_to_db(self, question_id, script_dict, prompt_list):
+        # 각 언어별 스크립트 리스트를 가져오기
+        script_kr_list = script_dict.get("kr", [])
+        script_en_list = script_dict.get("en", [])
+        script_cn_list = script_dict.get("cn", [])
+        script_ar_list = script_dict.get("ar", [])
+        script_jp_list = script_dict.get("jp", [])
 
-    def append_script_to_db(self, question_id, script, prompt):
+        # zip을 사용하여 각 언어별 스크립트와 프롬프트를 반복
+        for script_kr, script_en, script_cn, script_ar, script_jp, prompt in zip(script_kr_list, script_en_list,
+                                                                                 script_cn_list, script_ar_list,
+                                                                                 script_jp_list, prompt_list):
+            # append_script_to_db 함수 호출 시 각 언어별 스크립트를 인자로 전달
+            self.append_script_to_db(question_id, script_kr, script_en, script_cn, script_ar, script_jp, prompt)
+
+    def append_script_to_db(self, question_id, script_kr, script_en, script_cn, script_ar, script_jp, prompt):
         script_db = self.ref_script.get()
         new_id = 0
         if script_db is None:
@@ -47,7 +58,11 @@ class FBManger:
         new_data = {
             'id': new_id,
             'question_id': question_id,
-            'script': script,
+            'script_kr': script_kr,
+            'script_en': script_en,
+            'script_cn': script_cn,
+            'script_ar': script_ar,
+            'script_jp': script_jp,
             'prompt': prompt,
             'image_path': image_path,
             #3d/0234_6_4
