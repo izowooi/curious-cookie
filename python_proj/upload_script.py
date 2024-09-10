@@ -17,23 +17,35 @@ class FBManger:
         self.ref_question = db.reference('/question_db')
         self.ref_script = db.reference('/script_db')
 
-    def set_processed_question(self, question_id):
+    def set_generated_script(self, question_id):
+        self.set_processed_question('generated_script', question_id)
+
+    def set_generated_picture(self, question_id):
+        self.set_processed_question('generated_picture', question_id)
+
+    def set_processed_question(self, generated_key, question_id):
         question_db = self.ref_question.get()
         if question_db is not None:
             for data in question_db:
                 if data['id'] == question_id:
-                    data['generated'] = 'true'
+                    data[generated_key] = 'true'
                     question_db[data['id']] = data
                     break
 
         self.ref_question.set(question_db)
 
-    def get_unprocessed_questions_from_db(self):
+    def get_no_script_from_db(self):
+        return self.get_unprocessed_questions_from_db('generated_script')
+
+    def get_no_picture_from_db(self):
+        return self.get_unprocessed_questions_from_db('generated_picture')
+
+    def get_unprocessed_questions_from_db(self, generated_key):
         ret = {}
         question_db = self.ref_question.get()
         if question_db is not None:
             for data in question_db:
-                if data['generated'] == 'true' or data['generated'] == 'True':
+                if data[generated_key] == 'true' or data[generated_key] == 'True':
                     continue
                 ret[data['id']] = data['question']
         return ret
