@@ -14,13 +14,13 @@ class MidjourneyBot:
     def save_images(self, question_id, script_seq, image_urls):
         formatted_question_id = f'{question_id:04d}'
         formatted_script_seq = f'{script_seq:02d}'
-        image_styles = ["mom", "3d", "2d"]
+        image_styles = ["mommy", "3d", "2d"]
 
         for image_style in image_styles:
             for i, image_url in enumerate(image_urls[image_style]):
                 response = requests.get(image_url)
                 formatted_img_index = f'{i:01d}'
-                image_path = f'{image_style}/{formatted_question_id}_{formatted_script_seq}_{image_style}_{formatted_img_index}.png'
+                image_path = f'origin_png/{image_style}/{formatted_question_id}_{formatted_script_seq}_{image_style}_{formatted_img_index}.png'
                 with open(image_path, 'wb') as file:
                     file.write(response.content)
 
@@ -30,7 +30,7 @@ class MidjourneyBot:
             self.save_images(question_id, index, image_urls)
 
     def generate_illustration_by_prompt(self, prompt):
-        image_urls = {"3d": [], "2d": [], "mom": []}
+        image_urls = {"3d": [], "2d": [], "mommy": []}
         options = {
             "ar": "16:9",
             "v": "6.1"
@@ -42,7 +42,7 @@ class MidjourneyBot:
         for index, illustration_style in enumerate(illustration_styles):
             paint_style = None
             if index == 0:
-                paint_style = 'mom'
+                paint_style = 'mommy'
             elif index == 1:
                 paint_style = '3d'
             elif index == 2:
