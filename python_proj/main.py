@@ -27,12 +27,12 @@ def main():
     for question_id, question_text in question_dict.items():
         print(f'question_id: {question_id}, question_text: {question_text}')
         script_dict, prompt_list, category = openai_chat_bot.generate_script(question_text)
-        fb_manager.append_script_list_to_db(question_id, script_dict, prompt_list)
+        script_id_list = fb_manager.append_script_list_to_db(question_id, script_dict, prompt_list)
         fb_manager.set_generated_script(question_id)
 
         gen_script_time = time.time()
-
-        midjourney_bot.generate_illustration_list(question_id, prompt_list)
+        #todo:script_id_list 로직 추가 후 테스트 안 되었음.
+        midjourney_bot.generate_and_save_illustrations_list(script_id_list, prompt_list)
         gen_illustration_time = time.time()
         #todo:일러스트 만든 후에 디비에 저장하는 코드 추가
 
@@ -52,13 +52,14 @@ def test_gen_script():
 
 
 def test_gen_illustration():
-    question_id = 0
+    no_illustration_dict = fb_manager.get_no_illustration_from_db()
 
-    prompt_list = ['A scene with diverse children lying down, each with unique dream bubbles showing different themes.']
-
-    midjourney_bot.generate_illustration_list(question_id, prompt_list)
+    for script_id, prompt in no_illustration_dict.items():
+        print(f'script_id: {script_id}, prompt_list: {prompt}')
+        midjourney_bot.generate_and_save_illustrations(script_id, prompt)
+        fb_manager.set_processed_script(script_id)
 
 
 #main()
-#test_gen_illustration()
+test_gen_illustration()
 #test_gen_script()
