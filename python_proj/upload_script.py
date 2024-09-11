@@ -51,6 +51,7 @@ class FBManger:
         return ret
 
     def append_script_list_to_db(self, question_id, script_dict, prompt_list):
+        script_id_list = []
         # 각 언어별 스크립트 리스트를 가져오기
         script_kr_list = script_dict.get("kr", [])
         script_en_list = script_dict.get("en", [])
@@ -63,7 +64,31 @@ class FBManger:
                                                                                  script_cn_list, script_ar_list,
                                                                                  script_jp_list, prompt_list):
             # append_script_to_db 함수 호출 시 각 언어별 스크립트를 인자로 전달
-            self.append_script_to_db(question_id, script_kr, script_en, script_cn, script_ar, script_jp, prompt)
+            script_id = self.append_script_to_db(question_id, script_kr, script_en, script_cn, script_ar, script_jp, prompt)
+            script_id_list.append(script_id)
+        return script_id_list
+
+
+    def set_processed_script(self, script_id):
+        generated_key = 'image_generated'
+        script_db = self.ref_script.get()
+        if script_db is not None:
+            for data in script_db:
+                if data['id'] == script_id:
+                    data[generated_key] = 'true'
+                    script_db[script_id] = data
+                    break
+
+        self.ref_script.set(script_db)
+
+    # DB 에서 아직 일러스트를 생성하지 않은 대본을 리스트로 가져옴
+    def get_no_illustration_from_db(self):
+        script_db = self.ref_script.get()
+        ret = {}
+        for data in script_db:
+            if 'image_generated' not in data or data['image_generated'] == 'false':
+                ret[data['id']] = data['prompt']
+        return ret
 
     def append_script_to_db(self, question_id, script_kr, script_en, script_cn, script_ar, script_jp, prompt):
         script_db = self.ref_script.get()
@@ -98,13 +123,14 @@ class FBManger:
             'script_jp': script_jp,
             'prompt': prompt,
             'image_path': image_path,
+            'image_generated': 'false',
             #3d/0234_6_4
         }
 
         #ref.push(new_data)
         self.ref_script.child(str(new_id)).set(new_data)
-
-        print(f"Script added to script_db")
+        return new_id
+        print(f"Script {new_id} added to script_db")
 
     def test(self):
         self.append_script_list_to_db(0, ["script1", "script2"], ["prompt1", "prompt2"])
