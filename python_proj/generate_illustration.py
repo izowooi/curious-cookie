@@ -11,23 +11,26 @@ class MidjourneyBot:
     def __init__(self, discord_channel_id, discord_user_token):
         self.midjourney = Midjourney(discord_channel_id, discord_user_token)
 
-    def save_images(self, question_id, script_seq, image_urls):
-        formatted_question_id = f'{question_id:04d}'
-        formatted_script_seq = f'{script_seq:02d}'
+    def save_images(self, script_id, image_urls):
+        formatted_script_id = f'{script_id:06d}'
         image_styles = ["mommy", "3d", "2d"]
 
         for image_style in image_styles:
             for i, image_url in enumerate(image_urls[image_style]):
                 response = requests.get(image_url)
                 formatted_img_index = f'{i:01d}'
-                image_path = f'origin_png/{image_style}/{formatted_question_id}_{formatted_script_seq}_{image_style}_{formatted_img_index}.png'
+                image_path = f'origin_png/{image_style}/{formatted_script_id}_{image_style}_{formatted_img_index}.png'
                 with open(image_path, 'wb') as file:
                     file.write(response.content)
 
-    def generate_illustration_list(self, question_id, prompt_list):
-        for index, prompt in enumerate(prompt_list):
+    def generate_and_save_illustrations_list(self, script_id_list, prompt_list):
+        for script_id, prompt in zip(script_id_list, prompt_list):
             image_urls = self.generate_illustration_by_prompt(prompt)
-            self.save_images(question_id, index, image_urls)
+            self.save_images(script_id, image_urls)
+
+    def generate_and_save_illustrations(self, script_id, prompt):
+            image_urls = self.generate_illustration_by_prompt(prompt)
+            self.save_images(script_id, image_urls)
 
     def generate_illustration_by_prompt(self, prompt):
         image_urls = {"3d": [], "2d": [], "mommy": []}
