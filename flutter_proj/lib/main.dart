@@ -1,53 +1,46 @@
 // main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:Curious_Cookie/widget/home_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final navigationIndexProvider = StateProvider<int>((ref) {
+  return 0;
+});
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
-    runApp(MyApp());
+    runApp(ProviderScope(child: MainApp()));
   });
 }
 
-class MyApp extends StatelessWidget {
+class MainApp extends ConsumerWidget{
+
+  MainApp({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final navigationIndex = ref.watch(navigationIndexProvider);
+    final List<Widget> _pages = [
+    HomeWidget(),
+    Center(child: Text('Story')),
+    Center(child: Text('Settings')),
+    ];
     return MaterialApp(
       title: 'Curious Cookie',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
-    );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    Center(child: Text('Home')),
-    Center(child: Text('Story')),
-    Center(child: Text('Settings')),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+      home: Scaffold(
       body: Row(
         children: <Widget>[
           NavigationRail(
-            selectedIndex: _selectedIndex,
+            selectedIndex: navigationIndex,
             onDestinationSelected: (int index) {
-              setState(() {
-                _selectedIndex = index;
-              });
+              ref.read(navigationIndexProvider.notifier).state = index;
             },
             labelType: NavigationRailLabelType.selected,
             destinations: [
@@ -71,10 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
           VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
           Expanded(
-            child: _pages[_selectedIndex],
+            child: _pages[navigationIndex],
           )
         ],
       ),
+    ),
     );
   }
 }
