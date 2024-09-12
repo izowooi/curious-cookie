@@ -1,8 +1,9 @@
 // main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Curious_Cookie/widget/home_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:Curious_Cookie/widget/home_widget.dart';
+import 'package:Curious_Cookie/widget/custom_image_widget.dart';
 
 final navigationIndexProvider = StateProvider<int>((ref) {
   return 0;
@@ -26,7 +27,7 @@ class MainApp extends ConsumerWidget{
     final navigationIndex = ref.watch(navigationIndexProvider);
     final List<Widget> _pages = [
     HomeWidget(),
-    Center(child: Text('Story')),
+    CustomImageWidget(),
     Center(child: Text('Settings')),
     ];
     return MaterialApp(
