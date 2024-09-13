@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CustomImageWidget extends ConsumerWidget {
+class StoryWidget extends ConsumerWidget {
   final String imageUrl = 'assets/000011_mommy_1.png';
   final String description = "설명을 추가하세요. 설명을 추가하세요. 설명을 추가하세요. 설명을 추가하세요. 설명을 추가하세요. 설명을 추가하세요. ";
   
-  CustomImageWidget({super.key});
+  StoryWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,16 +48,16 @@ class CustomImageWidget extends ConsumerWidget {
           ),
         ),        // 하단 텍스트
         Positioned(
-          bottom: 16.0, // 아래에서 위로 16.0 패딩
+          bottom: 64.0, // 아래에서 위로 16.0 패딩
           left: 0,
           right: 0,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 128.0),
             child: Text(
               description,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16.0,
+                fontSize: 32.0,
                 backgroundColor: Colors.black54, // 텍스트 배경을 반투명 검정색으로 설정
               ),
               textAlign: TextAlign.center,
