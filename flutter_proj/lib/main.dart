@@ -1,8 +1,11 @@
 // main.dart
+import 'package:Curious_Cookie/controller/question_manager.dart';
 import 'package:Curious_Cookie/widget/setting_widget.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:Curious_Cookie/widget/home_widget.dart';
 import 'package:Curious_Cookie/widget/story_widget.dart';
 import 'package:Curious_Cookie/widget/setting_widget.dart';
@@ -11,13 +14,18 @@ final navigationIndexProvider = StateProvider<int>((ref) {
   return 0;
 });
 
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
     runApp(ProviderScope(child: MainApp()));
   });
+  
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await QuestionManager().initialize();
 }
 
 class MainApp extends ConsumerWidget{
