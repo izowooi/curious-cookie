@@ -1,4 +1,4 @@
-package com.example.flutter_proj
+package com.izowooi.curiouscookie
 
 import io.flutter.embedding.android.FlutterActivity
 
