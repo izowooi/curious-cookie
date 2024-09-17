@@ -9,9 +9,6 @@ class QuestionManager {
   final List<QuestionModel> _questions = [];
   List<QuestionModel> get questions => _questions;
 
-  final List<ScriptModel> _scripts = [];
-  List<ScriptModel> get scripts => _scripts;
-
   factory QuestionManager() {
       return _instance;
   }
@@ -23,13 +20,13 @@ class QuestionManager {
     if (snapshot.exists) {
       try {
         List<dynamic> data = List<dynamic>.from(snapshot.value as List);
-        data.forEach((element) {
+        for (var element in data) {
           if (element == null) {
-            return;
+            continue;
           }
           QuestionModel question = QuestionModel.fromJson(element);
           _questions.add(question);
-        });
+        }
         
         print("Parsed _questions: ${_questions.length}");
       } catch (e) {
@@ -46,11 +43,12 @@ class QuestionManager {
 
   List<String> getImageUrls() {
     return [
-      "assets/000011_mommy_1.png",
-      "assets/000012_mommy_1.png",
-      "assets/000013_mommy_1.png",
-      "assets/000014_mommy_1.png",
-      "assets/000015_mommy_1.png"
+      "assets/2d/000000_2d_0.png",
+      "assets/2d/000001_2d_0.png",
+      "assets/2d/000002_2d_0.png",
+      "assets/2d/000003_2d_0.png",
+      "assets/2d/000004_2d_0.png",
+      "assets/2d/000005_2d_0.png"
     ];
   }
 }
