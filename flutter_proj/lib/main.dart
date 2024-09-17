@@ -1,17 +1,22 @@
 // main.dart
-import 'package:Curious_Cookie/controller/question_manager.dart';
-import 'package:Curious_Cookie/widget/setting_widget.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:Curious_Cookie/controller/question_manager.dart';
+import 'package:Curious_Cookie/controller/user_settings_notifier.dart';
+import 'package:Curious_Cookie/model/user_settings.dart';
+import 'package:Curious_Cookie/widget/setting_widget.dart';
 import 'package:Curious_Cookie/widget/home_widget.dart';
 import 'package:Curious_Cookie/widget/story_widget.dart';
-import 'package:Curious_Cookie/widget/setting_widget.dart';
 
 final navigationIndexProvider = StateProvider<int>((ref) {
   return 0;
+});
+
+final userSettingsProvider = StateNotifierProvider<UserSettingsNotifier, UserSettings>((ref) {
+  return UserSettingsNotifier();
 });
 
 void main() async {
@@ -21,21 +26,16 @@ void main() async {
     runApp(ProviderScope(child: MainApp()));
   });
   
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  await QuestionManager().initialize();
 }
 
 class MainApp extends ConsumerWidget{
 
-  MainApp({super.key});
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final navigationIndex = ref.watch(navigationIndexProvider);
-    final List<Widget> _pages = [
+  final navigationIndex = ref.watch(navigationIndexProvider);
+    final List<Widget> pages = [
     HomeWidget(),
     StoryWidget(),
     SettingWidget(),
@@ -54,7 +54,7 @@ class MainApp extends ConsumerWidget{
               ref.read(navigationIndexProvider.notifier).state = index;
             },
             labelType: NavigationRailLabelType.selected,
-            destinations: [
+            destinations: const [
               NavigationRailDestination(
                 icon: Icon(Icons.home),
                 selectedIcon: Icon(Icons.home_filled),
@@ -72,10 +72,10 @@ class MainApp extends ConsumerWidget{
               ),
             ],
           ),
-          VerticalDivider(thickness: 1, width: 1),
+          const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
           Expanded(
-            child: _pages[navigationIndex],
+            child: pages[navigationIndex],
           )
         ],
       ),

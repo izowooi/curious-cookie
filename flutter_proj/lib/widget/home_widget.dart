@@ -13,34 +13,53 @@ class HomeWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final questions = questionManager.getQuestions();
     final imageUrls = questionManager.getImageUrls();
-
+    print('questions length: ${questions.length}, imageUrls length: ${imageUrls.length}');
     return Scaffold(
       appBar: AppBar(
         title: const Text('무엇이든 물어봐요'),
       ),
-      body: ListView.builder(
-        itemCount: questions.length,
-        itemBuilder: (context, index) {
-            return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Container(
-              child: ListTile(
-              leading: Image.asset(
-                imageUrls[index],
-                fit: BoxFit.cover,
-              ),
-              title: Text(questions[index]),
-              trailing: IconButton(
-                icon: Icon(Icons.arrow_forward),
-                onPressed: () {
-                ref.read(navigationIndexProvider.notifier).state = 1;
-                },
-              ),
-              ),
-            ),
-          );
+      body: FutureBuilder(
+        future: questionManager.initialize(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return _buildListView(ref);
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         },
       ),
     );    
+  }
+  
+  Widget _buildListView(WidgetRef ref) {
+    final questions = questionManager.getQuestions();
+    final imageUrls = questionManager.getImageUrls();
+    print('_buildListView questions length: ${questions.length}, imageUrls length: ${imageUrls.length}');
+
+    return ListView.builder(
+      itemCount: questions.length,
+      itemBuilder: (context, index) {
+          return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Container(
+            child: ListTile(
+            leading: Image.asset(
+              imageUrls[index],
+              fit: BoxFit.cover,
+            ),
+            title: Text(questions[index]),
+            trailing: IconButton(
+              icon: const Icon(Icons.arrow_forward),
+              onPressed: () {
+              ref.read(navigationIndexProvider.notifier).state = 1;
+              },
+            ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

@@ -1,9 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:Curious_Cookie/model/question_model.dart';
 import 'package:Curious_Cookie/model/script_model.dart';
+import 'package:Curious_Cookie/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:Curious_Cookie/controller/question_manager.dart';
 
 class QuestionManager {
-  final DatabaseReference _questionRef = FirebaseDatabase.instance.ref('question_db');
+  late DatabaseReference _questionRef;
   static final QuestionManager _instance = QuestionManager._internal();
 
   final List<QuestionModel> _questions = [];
@@ -15,7 +18,17 @@ class QuestionManager {
 
   QuestionManager._internal();
 
+  bool get isInitialized => _questions.isNotEmpty;
+
   Future<void> initialize() async {
+    if (isInitialized) {
+      return;
+    }
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    _questionRef = FirebaseDatabase.instance.ref('question_db');
     DataSnapshot snapshot = await _questionRef.get();
     if (snapshot.exists) {
       try {
