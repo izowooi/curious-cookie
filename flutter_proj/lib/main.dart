@@ -11,6 +11,10 @@ import 'package:Curious_Cookie/widget/setting_widget.dart';
 import 'package:Curious_Cookie/widget/home_widget.dart';
 import 'package:Curious_Cookie/widget/story_widget.dart';
 
+final storyIndexProvider = StateProvider<int>((ref) {
+  return 0;
+});
+
 final navigationIndexProvider = StateProvider<int>((ref) {
   return 0;
 });
