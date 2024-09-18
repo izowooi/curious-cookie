@@ -1,25 +1,25 @@
 class UserSettings {
   final String style;
-  final String quizId;
+  final int questionId;
   final String language;
   final double fontSize;
 
   UserSettings({
     required this.style,
-    required this.quizId,
+    required this.questionId,
     required this.language,
     required this.fontSize,
   });
 
   UserSettings copyWith({
     String? style,
-    String? quizId,
+    int? questionId,
     String? language,
     double? fontSize,
   }) {
     return UserSettings(
       style: style ?? this.style,
-      quizId: quizId ?? this.quizId,
+      questionId: questionId ?? this.questionId,
       language: language ?? this.language,
       fontSize: fontSize ?? this.fontSize,
     );

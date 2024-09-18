@@ -3,7 +3,7 @@ import 'package:Curious_Cookie/model/user_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSettingsNotifier extends StateNotifier<UserSettings> {
-  UserSettingsNotifier() : super(UserSettings(style: '2d', quizId: '0', language: 'kr', fontSize: 32.0))
+  UserSettingsNotifier() : super(UserSettings(style: '2d', questionId: 0, language: 'kr', fontSize: 32.0))
   {
     _loadFromPreferences();
   }
@@ -11,16 +11,16 @@ class UserSettingsNotifier extends StateNotifier<UserSettings> {
   Future<void> _loadFromPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final style = prefs.getString('style') ?? '2d';
-    final quizId = prefs.getString('quizId') ?? '0';
+    final questionId = prefs.getInt('questionId') ?? 0;
     final language = prefs.getString('language') ?? 'kr';
     final fontSize = prefs.getDouble('fontSize') ?? 32.0;
-    state = UserSettings(style: style, quizId: quizId, language: language, fontSize: fontSize);
+    state = UserSettings(style: style, questionId: questionId, language: language, fontSize: fontSize);
   }
 
   Future<void> _saveToPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('style', state.style);
-    await prefs.setString('quizId', state.quizId);
+    await prefs.setInt('questionId', state.questionId);
     await prefs.setString('language', state.language);
     await prefs.setDouble('fontSize', state.fontSize);
   }
@@ -30,8 +30,8 @@ class UserSettingsNotifier extends StateNotifier<UserSettings> {
     _saveToPreferences();
   }
 
-  void updateQuizId(String newQuizId) {
-    state = state.copyWith(quizId: newQuizId);
+  void updateQuestionId(int newQuestionId) {
+    state = state.copyWith(questionId: newQuestionId);
     _saveToPreferences();
   }
 
