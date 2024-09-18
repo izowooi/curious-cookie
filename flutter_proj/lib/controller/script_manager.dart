@@ -1,10 +1,13 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:Curious_Cookie/model/script_model.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:Curious_Cookie/firebase_options.dart';
 
 class ScriptManager {
   // 현재 화풍, 퀴즈 아이디, 언어를 유저 설정 클래스에서 받아와야함.
   // 
-  final DatabaseReference _questionRef = FirebaseDatabase.instance.ref('script_db');
+  late DatabaseReference _questionRef;
   static final ScriptManager _instance = ScriptManager._internal();
 
   final List<ScriptModel> _scripts = [];
@@ -16,7 +19,19 @@ class ScriptManager {
 
   ScriptManager._internal();
 
+  bool get isInitialized => _scripts.isNotEmpty;
+
   Future<void> initialize() async {
+    if (isInitialized) {
+      return;
+    }
+    
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+
+    _questionRef = FirebaseDatabase.instance.ref('script_db');
     DataSnapshot snapshot = await _questionRef.get();
     if (snapshot.exists) {
       try {
@@ -42,7 +57,16 @@ class ScriptManager {
     return _scripts.map((e) => e.scriptAR).toList();
   }
 
+  List<int> getDescriptionIds(int questionId) {
+    return _scripts.where((element) => element.questionId == questionId).map((e) => e.id).toList();
+  }
+
+  List<ScriptModel> getScripts(int questionId) {
+    return _scripts.where((element) => element.questionId == questionId).toList();
+  }
+
   String getIllustraionUrl(int scriptId, String paintStyle) {
+    //
     return _scripts.firstWhere((element) => element.id == scriptId).imagePath;
 
   }
