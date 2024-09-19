@@ -250,7 +250,7 @@ class Midjourney:
     # sources['caracters'] = [url1, url2, url3] // List of images of caracters to use as input // Add with the parameter --cref
     # sources['styles'] = [url1, url2, url3] // List of images of styles to use as input // Add with the parameter --sref
 
-    def generate(self, prompt, options={}, sources={}, upscale_index=-1):
+    def generate(self, prompt, options={}, sources={}, upscale_index=-1, upscale=True):
 
         prompt = prompt.strip()
 
@@ -295,10 +295,13 @@ class Midjourney:
 
         # print(imagine)
 
-        if upscale_index == -1:
-            upscale_index = random.randint(0, 3)
-        # print(upscale_index)
-        upscaled_photo_url = self.upscale(imagine, upscale_index)
+        if upscale:
+            if upscale_index == -1:
+                upscale_index = random.randint(0, 3)
+            # print(upscale_index)
+            upscaled_photo_url = self.upscale(imagine, upscale_index)
+        else:
+            upscaled_photo_url = None
 
         return {
             'imagine_message_id': imagine['id'],
