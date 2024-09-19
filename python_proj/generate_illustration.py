@@ -11,87 +11,40 @@ class MidjourneyBot:
     def __init__(self, discord_channel_id, discord_user_token):
         self.midjourney = Midjourney(discord_channel_id, discord_user_token)
 
-    def save_images(self, script_id, image_urls):
+    def save_images(self, script_id, image_urls, paint_style):
         formatted_script_id = f'{script_id:06d}'
-        image_styles = ["mommy", "3d", "2d"]
 
-        for image_style in image_styles:
-            for i, image_url in enumerate(image_urls[image_style]):
-                response = requests.get(image_url)
-                formatted_img_index = f'{i:01d}'
-                image_path = f'origin_png/{image_style}/{formatted_script_id}_{image_style}_{formatted_img_index}.png'
-                with open(image_path, 'wb') as file:
-                    file.write(response.content)
+        for i, image_url in enumerate(image_urls[paint_style]):
+            response = requests.get(image_url)
+            formatted_img_index = f'{i:01d}'
+            image_path = f'origin_png/{paint_style}/{formatted_script_id}_{paint_style}_{formatted_img_index}.png'
+            with open(image_path, 'wb') as file:
+                file.write(response.content)
 
     def generate_and_save_illustrations_list(self, script_id_list, prompt_list):
         for script_id, prompt in zip(script_id_list, prompt_list):
             image_urls = self.generate_illustration_by_prompt(prompt)
             self.save_images(script_id, image_urls)
 
-    def generate_and_save_illustrations(self, script_id, prompt):
-            image_urls = self.generate_illustration_by_prompt(prompt)
-            self.save_images(script_id, image_urls)
+    def generate_and_save_illustrations(self, script_id, prompt, paint_style, prompt_suffix):
+        image_urls = self.generate_illustration_by_prompt(prompt, paint_style, prompt_suffix)
+        self.save_images(script_id, image_urls, paint_style)
 
-    def generate_illustration_by_prompt(self, prompt):
-        image_urls = {"3d": [], "2d": [], "mommy": []}
+    def generate_illustration_by_prompt(self, prompt, paint_style, prompt_suffix):
+        image_urls = {paint_style: []}
         options = {
             "ar": "16:9",
             "v": "6.1"
         }
-        illustration_styles = [' --p om8joos',
-                         ' Pixar style, 3D rendered, bright colors, expressive emotions, smooth textures, detailed lighting, cinematic composition',
-                         ' vector illustration japanese --p om8joos']
+        # illustration_styles = [' Early Clean, minimalist design. vector illustration japanese --p om8joos',
+        #                  ' Pixar style, 3D rendered, bright colors, expressive emotions, smooth textures, detailed lighting, cinematic composition',
+        #                  ' vector illustration japanese --p om8joos']
 
-        for index, illustration_style in enumerate(illustration_styles):
-            paint_style = None
-            if index == 0:
-                paint_style = 'mommy'
-            elif index == 1:
-                paint_style = '3d'
-            elif index == 2:
-                paint_style = '2d'
+        img_prompt = f'{prompt}' + prompt_suffix
+        message = self.midjourney.generate(img_prompt, options, upscale=False)
+        imagine = message['imagine']
 
-            img_prompt = f'{prompt}' + illustration_style
-            message = self.midjourney.generate(img_prompt, options, upscale_index=0)
-            image_urls[paint_style].append(message['upscaled_photo_url'])
-
-            if 'imagine' in message:
-                imagine = message['imagine']
-                upscaled_photo_url = self.midjourney.upscale(imagine, 3)
-                image_urls[paint_style].append(upscaled_photo_url)
+        image_url = imagine['raw_message']['attachments'][0]['url']
+        image_urls[paint_style].append(image_url)
 
         return image_urls
-
-    def test(self):
-        prompt = "A fun and whimsical scene with strange, colorful creatures and unusual landscapes." +\
-                 " Pixar style, 3D rendered, bright colors, expressive emotions, smooth textures, detailed lighting, cinematic composition"
-        options = {
-            #"ar": "16:9",
-            "ar": "1:1",
-            "v": "6.1",
-        }
-
-        image_urls = []
-
-        for index, url in enumerate(image_urls):
-            response = requests.get(url)
-            if response.status_code == 200:
-                with open(f'test_{index}.png', 'wb') as file:
-                    file.write(response.content)
-                print(f"Image saved as test_{index}.png")
-            else:
-                print(f"Failed to download image from {url}")
-
-        # message = midjourney.generate(prompt, options, upscale_index=0)
-        #
-        # print(f"index 0 : {message['upscaled_photo_url']}")
-        #
-        # if 'imagine' in message:
-        #     imagine = message['imagine']
-        #     upscaled_photo_url = midjourney.upscale(imagine, 3)
-        #     print(f'index 3 : {upscaled_photo_url}')
-
-        # prompt_list = [prompt]
-        #
-        # for prompt in prompt_list:
-        #     print(prompt)

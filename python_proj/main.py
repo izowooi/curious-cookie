@@ -56,10 +56,14 @@ def gen_illustration():
 
     for script_id, prompt in no_illustration_dict.items():
         print(f'script_id: {script_id}, prompt_list: {prompt}')
-        midjourney_bot.generate_and_save_illustrations(script_id, prompt)
+        midjourney_bot.generate_and_save_illustrations(script_id, prompt, 'mommy', ' Early Clean, minimalist design. vector illustration japanese --p om8joos')
         fb_manager.set_processed_script(script_id)
 
+def test_gen_illustration():
+    test_script_id = 998
+    test_prompt = 'A colorful dream scene with a child flying on a giant butterfly surrounded by their favorite toys in a bright sky.'
+    midjourney_bot.generate_and_save_illustrations(test_script_id, test_prompt, 'mommy', ' Early Clean, minimalist design. vector illustration japanese --p om8joos')
 
-main()
-#gen_illustration()
+#main()
+test_gen_illustration()
 #test_gen_script()
