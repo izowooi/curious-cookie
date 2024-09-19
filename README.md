@@ -7,3 +7,4 @@
 - python-dotenv:1.0.1
 - firebase-admin:6.5.0
 - requests:2.32.3
+- pillow:10.4.0
