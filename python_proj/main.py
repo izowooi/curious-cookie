@@ -20,7 +20,7 @@ midjourney_bot = MidjourneyBot(discord_channel_id, discord_user_token)
 
 
 def main():
-    start_time = time.time()
+    start_time = gen_script_time = time.time()
 
     question_dict = fb_manager.get_no_script_from_db()
 
@@ -64,6 +64,6 @@ def test_gen_illustration():
     test_prompt = 'A colorful dream scene with a child flying on a giant butterfly surrounded by their favorite toys in a bright sky.'
     midjourney_bot.generate_and_save_illustrations(test_script_id, test_prompt, 'mommy', ' Early Clean, minimalist design. vector illustration japanese --p om8joos')
 
-#main()
-test_gen_illustration()
+main()
+#gen_illustration()
 #test_gen_script()

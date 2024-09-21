@@ -70,7 +70,7 @@ class FBManger:
 
 
     def set_processed_script(self, script_id):
-        generated_key = 'image_generated'
+        generated_key = 'image_generated_mommy'
         script_db = self.ref_script.get()
         if script_db is not None:
             for data in script_db:
@@ -86,7 +86,7 @@ class FBManger:
         script_db = self.ref_script.get()
         ret = {}
         for data in script_db:
-            if 'image_generated' not in data or data['image_generated'] == 'false':
+            if 'image_generated_mommy' not in data or data['image_generated_mommy'] == 'false':
                 ret[data['id']] = data['prompt']
         return ret
 
@@ -123,7 +123,7 @@ class FBManger:
             'script_jp': script_jp,
             'prompt': prompt,
             'image_path': image_path,
-            'image_generated': 'false',
+            'image_generated_mommy': 'false',
             #3d/0234_6_4
         }
 
