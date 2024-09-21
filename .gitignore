@@ -42,6 +42,8 @@ python_proj/response_data_3.json
 flutter_proj/assets/2d/
 flutter_proj/assets/3d/
 flutter_proj/assets/mommy/
+flutter_proj/assets/mommy_/
 flutter_proj/lib/firebase_options.dart
 flutter_proj/macos/Runner/GoogleService-Info.plist
 flutter_proj/firebase.json
+

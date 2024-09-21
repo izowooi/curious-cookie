@@ -1,7 +1,7 @@
 class ScriptModel {
   final int id;
   final int questionId;
-  final String imageGenerated;
+  final String imageGeneratedMommy;
   final String imagePath;
   final String prompt;
   final String scriptKR;
@@ -13,7 +13,7 @@ class ScriptModel {
   ScriptModel({
     required this.id,
     required this.questionId,
-    required this.imageGenerated,
+    required this.imageGeneratedMommy,
     required this.imagePath,
     required this.prompt,
     required this.scriptKR,
@@ -27,7 +27,7 @@ class ScriptModel {
     return ScriptModel(
       id: json['id'],
       questionId: json['question_id'],
-      imageGenerated: json['image_generated'],
+      imageGeneratedMommy: json['image_generated_mommy'],
       imagePath: json['image_path'],
       prompt: json['prompt'],
       scriptKR: json['script_kr'],
