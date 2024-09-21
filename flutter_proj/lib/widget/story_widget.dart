@@ -13,24 +13,44 @@ class StoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var storyIndex = ref.watch(storyIndexProvider);
-    final questionId = ref.watch(userSettingsProvider).quizId;
+    final questionId = ref.watch(userSettingsProvider).questionId;
     final scripts = ScriptManager().getScripts(questionId);
-
-    var descript_id = scripts[storyIndex].id;
-    var description = scripts[storyIndex].scriptKR;
+    var descriptId = scripts[storyIndex].id;
     var storyMaxIndex = scripts.length - 1;
-    final paint_style = 'mommy';
+    final paintStyle = ref.watch(userSettingsProvider).style;
 
-    var formattedDescriptId = NumberFormat('000000').format(descript_id);
+    var description = '';
+    final language = ref.watch(userSettingsProvider).language;
+    switch (language) {
+      case 'kr':
+        description = scripts[storyIndex].scriptKR;
+        break;
+      case 'en':
+        description = scripts[storyIndex].scriptEN;
+        break;
+      case 'jp':
+        description = scripts[storyIndex].scriptJP;
+        break;
+      case 'cn':
+        description = scripts[storyIndex].scriptCN;
+        break;
+      case 'ar':
+        description = scripts[storyIndex].scriptAR;
+        break;
+      default:
+        description = scripts[storyIndex].scriptKR;
+        break;
+    }
 
-    var imageUrl = 'assets/${paint_style}/${formattedDescriptId}_${paint_style}_1.png';
+    var formattedDescriptId = NumberFormat('000000').format(descriptId);
+
+    var imageUrl = 'assets/$paintStyle/${formattedDescriptId}_${paintStyle}_1.png';
     final userSettings = ref.watch(userSettingsProvider);
 
     print('hello');
     
-    print('Sytle: ${userSettings.style}, QuizId: ${userSettings.quizId}, Language: ${userSettings.language}');
+    print('Sytle: ${userSettings.style}, questionId: ${userSettings.questionId}, Language: ${userSettings.language}');
 
-    //var script = ScriptManager().GetScript(storyIndex)
     ButtonStyle buttonStyle = ElevatedButton.styleFrom(
       minimumSize: const Size(50, 50),
       shape: const CircleBorder(), // 버튼을 원형으로 설정

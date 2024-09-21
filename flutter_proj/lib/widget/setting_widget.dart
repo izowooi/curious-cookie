@@ -7,12 +7,24 @@ class SettingWidget extends ConsumerWidget {
 
   double _fontSize = 32.0;
 
+  String _LocalizeStyle(String style) {
+    switch (style) {
+      case '2d':
+        return '2D';
+      case '3d':
+        return '3D';
+      case 'mommy':
+        return '엄마';
+      default:
+        return 'Unknown';
+    }
+  }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userSettings = ref.watch(userSettingsProvider);
 
     print(
-        'SettingWidget()->Sytle: ${userSettings.style}, QuizId: ${userSettings.quizId}, Language: ${userSettings.language}, FontSize: ${userSettings.fontSize}');
+        'SettingWidget()->Sytle: ${userSettings.style}, questionId: ${userSettings.questionId}, Language: ${userSettings.language}, FontSize: ${userSettings.fontSize}');
 
     var textStyle = const TextStyle(fontSize: 18);
     return Scaffold(
@@ -36,10 +48,10 @@ class SettingWidget extends ConsumerWidget {
               Text('화풍 선택', style: textStyle),
               Row(
                 children: [
-                  ...['2d', '3d', '엄마'].map((style) {
+                  ...['2d', '3d', 'mommy'].map((style) {
                     return Expanded(
                       child: RadioListTile<String>(
-                        title: Text(style.toUpperCase()),
+                        title: Text(_LocalizeStyle(style)),
                         value: style,
                         groupValue: userSettings.style,
                         onChanged: (value) {
