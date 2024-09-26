@@ -2,7 +2,7 @@ from midjourney_sdk_py_multiple import Midjourney
 import requests
 from PIL import Image
 from io import BytesIO
-
+import os
 
 class MidjourneyBot:
 
@@ -24,6 +24,12 @@ class MidjourneyBot:
         piece_height = height // 2
 
         base_name = f'origin_png/{paint_style}/{script_id}_{paint_style}'
+        directory = os.path.dirname(base_name)
+
+        # 폴더가 없을 경우 생성
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+            print(f"Created directory {directory}")
 
         for i in range(2):
             for j in range(2):
