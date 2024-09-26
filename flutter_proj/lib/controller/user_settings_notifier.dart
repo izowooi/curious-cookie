@@ -3,14 +3,14 @@ import 'package:Curious_Cookie/model/user_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSettingsNotifier extends StateNotifier<UserSettings> {
-  UserSettingsNotifier() : super(UserSettings(style: '2d', questionId: 0, language: 'kr', fontSize: 32.0))
+  UserSettingsNotifier() : super(UserSettings(style: 'mommy', questionId: 0, language: 'kr', fontSize: 32.0))
   {
     _loadFromPreferences();
   }
 
   Future<void> _loadFromPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    final style = prefs.getString('style') ?? '2d';
+    final style = prefs.getString('style') ?? 'mommy';
     final questionId = prefs.getInt('questionId') ?? 0;
     final language = prefs.getString('language') ?? 'kr';
     final fontSize = prefs.getDouble('fontSize') ?? 32.0;

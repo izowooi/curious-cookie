@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:Curious_Cookie/main.dart';
 
 class SettingWidget extends ConsumerWidget {
-  SettingWidget({super.key});
+  const SettingWidget({super.key});
 
-  double _fontSize = 32.0;
+  final double _fontSize = 32.0;
 
   String _LocalizeStyle(String style) {
     switch (style) {
@@ -48,7 +48,7 @@ class SettingWidget extends ConsumerWidget {
               Text('화풍 선택', style: textStyle),
               Row(
                 children: [
-                  ...['2d', '3d', 'mommy'].map((style) {
+                  ...['mommy'].map((style) {
                     return Expanded(
                       child: RadioListTile<String>(
                         title: Text(_LocalizeStyle(style)),

@@ -1,10 +1,7 @@
 // main.dart
-import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:Curious_Cookie/controller/question_manager.dart';
 import 'package:Curious_Cookie/controller/user_settings_notifier.dart';
 import 'package:Curious_Cookie/model/user_settings.dart';
 import 'package:Curious_Cookie/widget/setting_widget.dart';
@@ -27,7 +24,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
-    runApp(ProviderScope(child: MainApp()));
+    runApp(const ProviderScope(child: MainApp()));
   });
   
 }
@@ -41,7 +38,7 @@ class MainApp extends ConsumerWidget{
   final navigationIndex = ref.watch(navigationIndexProvider);
     final List<Widget> pages = [
     HomeWidget(),
-    StoryWidget(),
+    const StoryWidget(),
     SettingWidget(),
     ];
     return MaterialApp(
