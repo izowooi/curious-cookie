@@ -41,6 +41,7 @@ class HomeWidget extends ConsumerWidget {
   }
   Widget _buildListView(WidgetRef ref) {
     final questions = questionManager.getQuestions();
+    final questionIds = questionManager.getQuestionsIds();
     final imageUrls = questionManager.getImageUrls();
     print(
         '_buildListView questions length: ${questions.length}, imageUrls length: ${imageUrls.length}');
@@ -52,17 +53,18 @@ class HomeWidget extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Container(
             child: ListTile(
-              leading: Image.asset(
-                imageUrls[index],
-                fit: BoxFit.cover,
-              ),
+              // leading: Image.asset(
+              //   imageUrls[index],
+              //   fit: BoxFit.cover,
+              // ),
+              leading: Icon(Icons.star_border),
               title: Text(questions[index]),
               trailing: IconButton(
                 icon: const Icon(Icons.arrow_forward),
                 onPressed: () {
                   ref.read(navigationIndexProvider.notifier).state = 1;
                   ref.read(storyIndexProvider.notifier).state = 0;
-                  ref.read(userSettingsProvider.notifier).updateQuestionId(index);
+                  ref.read(userSettingsProvider.notifier).updateQuestionId(questionIds[index]);
                 },
               ),
             ),

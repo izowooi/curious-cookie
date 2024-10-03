@@ -1,9 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:Curious_Cookie/model/question_model.dart';
-import 'package:Curious_Cookie/model/script_model.dart';
-import 'package:Curious_Cookie/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:Curious_Cookie/controller/question_manager.dart';
+import 'package:Curious_Cookie/model/question_model.dart';
+import 'package:Curious_Cookie/firebase_options.dart';
 
 class QuestionManager {
   late DatabaseReference _questionRef;
@@ -38,7 +36,9 @@ class QuestionManager {
             continue;
           }
           QuestionModel question = QuestionModel.fromJson(element);
-          _questions.add(question);
+          if (question.enabled == 'true') {
+            _questions.add(question);
+          }
         }
         
         print("Parsed _questions: ${_questions.length}");
@@ -52,6 +52,10 @@ class QuestionManager {
 
   List<String> getQuestions() {
     return _questions.map((e) => e.question).toList();
+  }
+
+  List<int> getQuestionsIds() {
+    return _questions.map((e) => e.id).toList();
   }
 
   List<String> getImageUrls() {
