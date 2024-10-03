@@ -44,7 +44,7 @@ class StoryWidget extends ConsumerWidget {
 
     var formattedDescriptId = NumberFormat('000000').format(descriptId);
 
-    var imageUrl = 'assets/$paintStyle/${formattedDescriptId}_${paintStyle}_1.png';
+    var imageUrl = 'assets/$paintStyle/${formattedDescriptId}_${paintStyle}_0.jpg';
     final userSettings = ref.watch(userSettingsProvider);
 
     print('hello');
