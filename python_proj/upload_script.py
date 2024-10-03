@@ -86,7 +86,8 @@ class FBManger:
         script_db = self.ref_script.get()
         ret = {}
         for data in script_db:
-            if 'image_generated_mommy' not in data or data['image_generated_mommy'] == 'false':
+            #if 'image_generated_mommy' not in data or data['image_generated_mommy'] != 'true' or data['id'] > 341:
+            if 'image_generated_mommy' not in data or data['image_generated_mommy'] != 'true':
                 ret[data['id']] = data['prompt']
         return ret
 
